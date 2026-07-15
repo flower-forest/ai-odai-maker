@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="創作に使える、かわいいAIお題メーカー。">
+  <title>きょうの、ひらめき。｜AIお題メーカー</title>
+  <style>
+    :root { --ink:#52384c; --sub:#896d80; --paper:#fff9fb; --card:rgba(255,255,255,.76); --line:#efdce5; --main:#d87a9c; --a:#ffd9e7; --b:#dceeff; --button:#fff; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-width:320px; min-height:100vh; display:grid; place-items:center; padding:22px 14px; color:var(--ink); background:radial-gradient(circle at 8% 7%,var(--b),transparent 29rem),radial-gradient(circle at 92% 90%,var(--a),transparent 30rem),var(--paper); font-family: ui-rounded, "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif; }
+    main { width:min(100%,680px); text-align:center; }
+    .hero { padding:26px 18px 22px; border-radius:28px; background:linear-gradient(135deg,var(--a),var(--b)); box-shadow:0 12px 35px rgba(121,81,110,.12); }
+    .spark { letter-spacing:.35em; font-size:18px; color:var(--sub); }
+    h1 { margin:7px 0 3px; font-size:clamp(27px,6vw,42px); font-weight:500; }
+    .lead { margin:0; color:var(--sub); }
+    .modes { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:18px 0 12px; }
+    button { font:inherit; color:inherit; cursor:pointer; }
+    .mode, .copy, .theme, .generate { border:1px solid var(--line); background:var(--button); border-radius:16px; transition:transform .15s ease, box-shadow .15s ease, background .15s ease; }
+    .mode { min-height:75px; padding:8px 5px; font-size:13px; }
+    .mode span { display:block; margin-bottom:3px; font-size:22px; }
+    .mode[aria-pressed="true"] { border-color:var(--main); background:color-mix(in srgb,var(--main) 13%, white); box-shadow:0 5px 13px rgba(183,89,126,.15); }
+    .prompt { min-height:205px; display:grid; place-items:center; padding:28px 24px; border:1px solid rgba(255,255,255,.8); border-radius:28px; background:var(--card); box-shadow:0 12px 35px rgba(121,81,110,.1); }
+    .label { margin-bottom:10px; color:var(--sub); font-size:14px; }
+    #prompt { font-size:clamp(22px,4.5vw,33px); line-height:1.45; font-weight:500; text-wrap:balance; }
+    .actions { display:flex; flex-wrap:wrap; justify-content:center; gap:9px; margin:13px 0 16px; }
+    .generate { padding:13px 21px; border-color:var(--main); background:var(--main); color:white; font-weight:500; box-shadow:0 6px 17px rgba(183,89,126,.2); }
+    .copy { padding:13px 18px; }
+    button:hover { transform:translateY(-2px); }
+    button:focus-visible { outline:3px solid var(--main); outline-offset:3px; }
+    .dresser { display:flex; align-items:center; justify-content:center; gap:9px; color:var(--sub); font-size:13px; }
+    .theme { width:29px; height:29px; border-radius:50%; padding:0; }
+    .theme[data-theme="sugar"] { background:linear-gradient(135deg,#ffd0e2,#bce5ff); }
+    .theme[data-theme="night"] { background:linear-gradient(135deg,#42346d,#ba91d1); }
+    .theme[data-theme="citrus"] { background:linear-gradient(135deg,#ffe077,#a7df9d); }
+    #notice { min-height:1.4em; margin:9px 0 0; color:var(--sub); font-size:13px; }
+    footer { margin-top:25px; color:var(--sub); font-size:12px; }
+    body.night { --ink:#f9f0ff; --sub:#e0c9e8; --paper:#201a35; --card:rgba(61,48,91,.75); --line:#6d5a8b; --main:#c891dc; --a:#403064; --b:#6f4f82; --button:#332a52; }
+    body.citrus { --ink:#425139; --sub:#6b7e62; --paper:#fffdf3; --card:rgba(255,255,255,.78); --line:#e8dcae; --main:#7eab72; --a:#ffe68a; --b:#bce3a8; --button:#fffef9; }
+    @media (max-width:430px) { .modes { grid-template-columns:repeat(2,1fr); } .hero { border-radius:23px; } .prompt { min-height:190px; border-radius:23px; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none!important; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <div class="spark" aria-hidden="true">✦ ♡ ✦</div>
+      <h1>きょうの、ひらめき。</h1>
+      <p class="lead">AI創作お題メーカー</p>
+    </header>
+    <section aria-label="お題メーカー">
+      <div class="modes" role="group" aria-label="お題のタイプ">
+        <button class="mode" type="button" data-mode="words" aria-pressed="true"><span>✧</span>単語3つ</button>
+        <button class="mode" type="button" data-mode="title" aria-pressed="false"><span>✎</span>タイトル</button>
+        <button class="mode" type="button" data-mode="emoji" aria-pressed="false"><span>☻</span>絵文字3つ</button>
+        <button class="mode" type="button" data-mode="scene" aria-pressed="false"><span>☾</span>ひとこと</button>
+      </div>
+      <div class="prompt" aria-live="polite">
+        <div><div class="label" id="label">単語をつなげて描こう</div><div id="prompt">月夜の喫茶店 × 透明な傘 × ひみつの手紙</div></div>
+      </div>
+      <div class="actions"><button class="generate" type="button" id="generate">お題を引く　✦</button><button class="copy" type="button" id="copy">コピー</button></div>
+      <div class="dresser" role="group" aria-label="着せ替えテーマ"><span>きせかえ</span><button class="theme" data-theme="sugar" aria-label="シュガー"></button><button class="theme" data-theme="night" aria-label="ミッドナイト"></button><button class="theme" data-theme="citrus" aria-label="シトラス"></button></div>
+      <p id="notice" aria-live="polite"></p>
+    </section>
+    <footer>創作のおともに。よいひらめきを ♡</footer>
+  </main>
+  <script>
+    const prompts = {
+      words: { label:'単語をつなげて描こう', list:['月夜の喫茶店 × 透明な傘 × ひみつの手紙','雲の城 × 金魚鉢 × 眠らない猫','雨上がりの駅 × 砂糖菓子 × 赤いリボン','海底図書館 × 蛍のランプ × 小さな鍵','星屑の花屋 × 猫の足あと × ミント色のドレス','冬の遊園地 × オルゴール × 青い羽根'] },
+      title: { label:'一枚絵のタイトルから描こう', list:['「きみにだけ見える、春の終わり」','「月がほどける午前二時」','「ソーダ水に沈む星の名前」','「あの夏、幽霊は花火を見ていた」','「透明な街で、ふたりだけが色を持つ」','「魔女の休日は雨のち金平糖」'] },
+      emoji: { label:'この3つを全部入れてみよう', list:['🪼　🫧　🕯️','🍓　🎠　🌙','🦋　🗝️　📮','🐈‍⬛　☔　💌','🦢　🎀　🪞','🌻　🚲　🪽'] },
+      scene: { label:'空気感からはじめよう', list:['誰もいない夜の水族館で、ひとりだけ笑っている。','春の風が強すぎて、街の看板が花びらになった。','遠い惑星の海辺。制服の少女が貝殻を拾う。','小さな魔女が、雨雲にレースを縫いつけている。','夕暮れの屋上で、ロボットが初めて泣いた。','眠る街の上を、巨大な白鳥が静かに通り過ぎる。'] }
+    };
+    let mode='words', last=-1;
+    const prompt=document.getElementById('prompt'), label=document.getElementById('label'), notice=document.getElementById('notice');
+    function draw(){ const set=prompts[mode]; let n=Math.floor(Math.random()*set.list.length); if(n===last)n=(n+1)%set.list.length; last=n; label.textContent=set.label; prompt.textContent=set.list[n]; notice.textContent=''; }
+    document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;last=-1;document.querySelectorAll('[data-mode]').forEach(x=>x.setAttribute('aria-pressed',x===b));draw();}));
+    document.getElementById('generate').addEventListener('click',draw);
+    document.getElementById('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(prompt.textContent);notice.textContent='コピーしました ♡';}catch{notice.textContent='コピーして使ってね：'+prompt.textContent;}});
+    document.querySelectorAll('.theme').forEach(b=>b.addEventListener('click',()=>{document.body.className=b.dataset.theme==='sugar'?'':b.dataset.theme;}));
+  </script>
+</body>
+</html>
