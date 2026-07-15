@@ -23,6 +23,7 @@
     .prompt { min-height:205px; display:grid; place-items:center; padding:28px 24px; border:1px solid rgba(255,255,255,.8); border-radius:28px; background:var(--card); box-shadow:0 12px 35px rgba(121,81,110,.1); }
     .label { margin-bottom:10px; color:var(--sub); font-size:14px; }
     #prompt { font-size:clamp(22px,4.5vw,33px); line-height:1.45; font-weight:500; text-wrap:balance; }
+    #emoji-meaning { margin:14px 0 0; color:var(--sub); font-size:14px; line-height:1.7; }
     .actions { display:flex; flex-wrap:wrap; justify-content:center; gap:9px; margin:13px 0 16px; }
     .generate { padding:13px 21px; border-color:var(--main); background:var(--main); color:white; font-weight:500; box-shadow:0 6px 17px rgba(183,89,126,.2); }
     .copy { padding:13px 18px; }
@@ -56,7 +57,7 @@
         <button class="mode" type="button" data-mode="scene" aria-pressed="false"><span>☾</span>ひとこと</button>
       </div>
       <div class="prompt" aria-live="polite">
-        <div><div class="label" id="label">単語だけを3つ、ぶつけよう</div><div id="prompt">映画館 × ホッチキス × ゾンビ</div></div>
+        <div><div class="label" id="label">単語だけを3つ、ぶつけよう</div><div id="prompt">映画館 × ホッチキス × ゾンビ</div><p id="emoji-meaning" hidden></p></div>
       </div>
       <div class="actions"><button class="generate" type="button" id="generate">お題を引く　✦</button><button class="copy" type="button" id="copy">コピー</button></div>
       <div class="dresser" role="group" aria-label="着せ替えテーマ"><span>きせかえ</span><button class="theme" data-theme="sugar" aria-label="シュガー"></button><button class="theme" data-theme="night" aria-label="ミッドナイト"></button><button class="theme" data-theme="citrus" aria-label="シトラス"></button></div>
@@ -71,13 +72,15 @@
     const titleThings=['保健室','パスワード','冷蔵庫','事故物件','観覧車','着ぐるみ','夜勤','自動販売機','葬儀屋','部長','幽霊','レシート','空き瓶','停電','集合写真','エレベーター','タクシー','監視カメラ','ロッカー','山奥','リモコン','金魚','転校生','地下鉄','偽名','宇宙人','校庭','宅配便','砂時計','バス停','ガム','怪獣','庭師','ラジオ','廃ホテル','防犯ブザー'];
     const titleStates=['失踪','偽物','寝不足','偽装','逆再生','誤作動','反省会','大渋滞','家出','停電','口止め','密談','予行演習','置き去り','居眠り','無断欠席','大掃除','誤配','変身','雨漏り','留守番','偽証','終電','不在票','悪夢','隠し事','謎解き','忘れ物','初期不良','連絡網','再放送','落書き','騒音','不具合','大遅刻','見間違い'];
     const titleVerbs=['踊らない','眠れない','嘘をつく','帰ってこない','急に増える','勝手に歌う','月へ行く','人間をやめる','返事をしない','消えたふりをする','屋上にいる','遅刻し続ける','名前を変える','ドアを開けない','だれかを待つ','夢に出てくる','笑いすぎる','空を飛べない','全部知っている','雨を嫌う','鍵をなくす','一度だけ泣く','朝を食べる','地下へ潜る'];
-    const emojis=['🪼','🫧','🕯️','🍓','🎠','🌙','🦋','🗝️','📮','🐈‍⬛','☔','💌','🦢','🎀','🪞','🌻','🚲','🪽','🧸','🍬','🎧','🪐','🫖','🪻','🧁','🎐','🧩','🧚','🍒','📚','🦜','🪄','🌂','🛼','🐚','🪴','🪲','🪰','🪳','🦠','🧫','🧬','🫀','🦷','🦴','👁️','🧠','🫁','🪤','🪠','🧯','🛎️','🗜️','🪚','🧲','🧷','🧻','🪣','🪑','🪜','🛗','🧳','🪫','🔋','📼','☎️','📟','🪪','🪪','⚗️','🧪','🧿','🪬','🗿','🪆','🎰','🪩','🪃','🛸','🛰️','🛹','🛞','🚧','🚨','⚰️','🗑️','🧼','🪥','🧽','🪒','🪤','🧱','🪨','🕳️','🌡️','🪫','🧃','🦤','🦭','🦞','🪼','🫎','🦠'];
+    const emojis=['🪼','🫧','🕯️','🍓','🎠','🌙','🦋','🗝️','📮','🐈‍⬛','☔','💌','🦢','🎀','🪞','🌻','🚲','🪽','🧸','🍬','🎧','🪐','🫖','🪻','🧁','🎐','🧩','🧚','🍒','📚','🦜','🪄','🌂','🛼','🐚','🪴','🪲','🪰','🪳','🦠','🧫','🧬','🫀','🦷','🦴','👁️','🧠','🫁','🪤','🪠','🧯','🛎️','🗜️','🪚','🧲','🧷','🧻','🪣','🪑','🪜','🛗','🧳','🪫','🔋','📼','☎️','📟','🪪','⚗️','🧪','🧿','🪬','🗿','🪆','🎰','🪩','🪃','🛸','🛰️','🛹','🛞','🚧','🚨','⚰️','🗑️','🧼','🪥','🧽','🪒','🧱','🪨','🕳️','🌡️','🧃','🦤','🦭','🦞','🫎'];
+    const emojiNames={'🪼':'クラゲ','🫧':'泡','🕯️':'ろうそく','🍓':'いちご','🎠':'メリーゴーランド','🌙':'三日月','🦋':'蝶','🗝️':'古い鍵','📮':'郵便ポスト','🐈‍⬛':'黒猫','☔':'傘と雨','💌':'ラブレター','🦢':'白鳥','🎀':'リボン','🪞':'鏡','🌻':'ひまわり','🚲':'自転車','🪽':'翼','🧸':'ぬいぐるみ','🍬':'飴','🎧':'ヘッドホン','🪐':'環のある惑星','🫖':'ティーポット','🪻':'ヒヤシンス','🧁':'カップケーキ','🎐':'風鈴','🧩':'パズル','🧚':'妖精','🍒':'さくらんぼ','📚':'本','🦜':'オウム','🪄':'魔法の杖','🌂':'閉じた傘','🛼':'ローラースケート','🐚':'巻き貝','🪴':'鉢植え','🪲':'甲虫','🪰':'ハエ','🪳':'ゴキブリ','🦠':'微生物','🧫':'ペトリ皿','🧬':'DNA','🫀':'心臓','🦷':'歯','🦴':'骨','👁️':'目','🧠':'脳','🫁':'肺','🪤':'ネズミ捕り','🪠':'ラバーカップ','🧯':'消火器','🛎️':'ベル','🗜️':'万力','🪚':'のこぎり','🧲':'磁石','🧷':'安全ピン','🧻':'トイレットペーパー','🪣':'バケツ','🪑':'椅子','🪜':'はしご','🛗':'エレベーター','🧳':'スーツケース','🪫':'空のバッテリー','🔋':'バッテリー','📼':'ビデオカセット','☎️':'電話','📟':'ポケベル','🪪':'身分証','⚗️':'蒸留器','🧪':'試験管','🧿':'ナザールのお守り','🪬':'ハムサ','🗿':'モアイ','🪆':'マトリョーシカ','🎰':'スロットマシン','🪩':'ミラーボール','🪃':'ブーメラン','🛸':'UFO','🛰️':'人工衛星','🛹':'スケートボード','🛞':'車輪','🚧':'工事中','🚨':'パトランプ','⚰️':'棺','🗑️':'ゴミ箱','🧼':'石鹸','🪥':'歯ブラシ','🧽':'スポンジ','🪒':'カミソリ','🧱':'レンガ','🪨':'石','🕳️':'穴','🌡️':'温度計','🧃':'紙パック飲料','🦤':'ドードー','🦭':'アザラシ','🦞':'ロブスター','🫎':'ヘラジカ'};
     const scenePlaces=['誰もいない夜の水族館で','終電後のファミレスで','雨漏りする校舎で','立入禁止の屋上で','深夜のサービスエリアで','廃ホテルのロビーで','真夏の葬儀場で','閉店後のホームセンターで','地下鉄の終点で','霧の濃い駐車場で','町はずれのコインランドリーで','雪の日のコンビニで','空っぽの体育館で','午前四時の病院で','水没しかけた地下街で','古い団地の廊下で','蛍光灯だけの研究所で','花火大会の翌朝で','雨雲の中の電車で','壊れた観覧車の下で','月面の給湯室で','海底の交番で','雲の上の駐車場で','砂漠の自動販売機の前で','工場の休憩室で','知らない町の駅前で'];
     const characters=['制服の少女が','夜勤明けの看護師が','着ぐるみの人が','幽霊になりたての会社員が','小学生の探偵が','寝不足の宇宙人が','二日酔いの魔女が','迷子のロボットが','無口な配達員が','三日前からいる猫が','元アイドルの警備員が','透明な転校生が','失業中の天使が','ベテランの怪獣が','顔を隠した庭師が','タクシー運転手が','卒業できない高校生が','壊れかけの人形が','不機嫌な人魚が','記憶喪失の刑事が','見習いの死神が','未来から来た清掃員が','泣かないピエロが','月を知らない子どもが','留守番中の王様が','風邪をひいたドラゴンが'];
     const actions=['自分の指名手配書を見つけた。','ずっと同じ留守電を聞いている。','本物の自分を探している。','だれもいない相手に謝っている。','壊れた自動販売機に話しかけている。','明日の天気を捨てようとしている。','知らない名前で呼ばれている。','誰かの夢から脱出できない。','財布の中に小さな海を飼っている。','町の秘密をうっかり放送してしまった。','自分の影と口げんかしている。','昨日の自分を尾行している。','使えない魔法だけを練習している。','冷蔵庫の中から助けを呼んでいる。','一度も会ったことのない友だちを待っている。','最終バスを一台だけ見送った。','月を返品しようとしている。','自分だけが読める落書きを見つけた。','町じゅうの時計を止めてしまった。','知らない鍵をポケットに入れている。','名前のない動物に餌をあげている。','空っぽの棺に花を入れている。','午前零時だけ人間に戻る。','だれかの人生を間違えて受け取った。','笑うたびに部屋が一つ増える。','雨の正体を知ってしまった。'];
     const history={words:[],title:[],emoji:[],scene:[]};
-    const prompt=document.getElementById('prompt'), label=document.getElementById('label'), notice=document.getElementById('notice');
+    const prompt=document.getElementById('prompt'), label=document.getElementById('label'), notice=document.getElementById('notice'), emojiMeaning=document.getElementById('emoji-meaning');
     let mode='words';
+    let currentEmojiNames=[];
     const pick=list=>list[Math.floor(Math.random()*list.length)];
     function unique(modeName,make){ let value,tries=0; do { value=make(); tries++; } while(history[modeName].includes(value)&&tries<80); history[modeName].push(value); if(history[modeName].length>40)history[modeName].shift(); return value; }
     function makePrompt(){
@@ -93,10 +96,10 @@
           `「${state}になった${thing}」`
         ]);
       });
-      if(mode==='emoji') return unique(mode,()=>{ const first=pick(emojis); let second=pick(emojis),third=pick(emojis); while(second===first)second=pick(emojis); while(third===first||third===second)third=pick(emojis); return `${first}　${second}　${third}`; });
+      if(mode==='emoji') return unique(mode,()=>{ const first=pick(emojis); let second=pick(emojis),third=pick(emojis); while(second===first)second=pick(emojis); while(third===first||third===second)third=pick(emojis); currentEmojiNames=[first,second,third].map(emoji=>`${emoji}＝${emojiNames[emoji]||'なぞの絵文字'}`); return `${first}　${second}　${third}`; });
       return unique(mode,()=>`${pick(scenePlaces)}、${pick(characters)}${pick(actions)}`);
     }
-    function draw(){ const labels={words:'単語だけを3つ、ぶつけよう',title:'一枚絵のタイトルから描こう',emoji:'この3つを全部入れてみよう',scene:'空気感からはじめよう'}; label.textContent=labels[mode]; prompt.textContent=makePrompt(); notice.textContent=''; }
+    function draw(){ const labels={words:'単語だけを3つ、ぶつけよう',title:'一枚絵のタイトルから描こう',emoji:'この3つを全部入れてみよう',scene:'空気感からはじめよう'}; label.textContent=labels[mode]; prompt.textContent=makePrompt(); emojiMeaning.hidden=mode!=='emoji'; emojiMeaning.textContent=mode==='emoji' ? currentEmojiNames.join('　／　') : ''; notice.textContent=''; }
     document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.setAttribute('aria-pressed',x===b));draw();}));
     document.getElementById('generate').addEventListener('click',draw);
     document.getElementById('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(prompt.textContent);notice.textContent='コピーしました ♡';}catch{notice.textContent='コピーして使ってね：'+prompt.textContent;}});
