@@ -65,16 +65,29 @@
     <footer>創作のおともに。よいひらめきを ♡</footer>
   </main>
   <script>
-    const prompts = {
-      words: { label:'単語をつなげて描こう', list:['月夜の喫茶店 × 透明な傘 × ひみつの手紙','雲の城 × 金魚鉢 × 眠らない猫','雨上がりの駅 × 砂糖菓子 × 赤いリボン','海底図書館 × 蛍のランプ × 小さな鍵','星屑の花屋 × 猫の足あと × ミント色のドレス','冬の遊園地 × オルゴール × 青い羽根'] },
-      title: { label:'一枚絵のタイトルから描こう', list:['「きみにだけ見える、春の終わり」','「月がほどける午前二時」','「ソーダ水に沈む星の名前」','「あの夏、幽霊は花火を見ていた」','「透明な街で、ふたりだけが色を持つ」','「魔女の休日は雨のち金平糖」'] },
-      emoji: { label:'この3つを全部入れてみよう', list:['🪼　🫧　🕯️','🍓　🎠　🌙','🦋　🗝️　📮','🐈‍⬛　☔　💌','🦢　🎀　🪞','🌻　🚲　🪽'] },
-      scene: { label:'空気感からはじめよう', list:['誰もいない夜の水族館で、ひとりだけ笑っている。','春の風が強すぎて、街の看板が花びらになった。','遠い惑星の海辺。制服の少女が貝殻を拾う。','小さな魔女が、雨雲にレースを縫いつけている。','夕暮れの屋上で、ロボットが初めて泣いた。','眠る街の上を、巨大な白鳥が静かに通り過ぎる。'] }
-    };
-    let mode='words', last=-1;
+    const places=['月夜の喫茶店','雲の城','雨上がりの駅','海底図書館','星屑の花屋','冬の遊園地','夕暮れの屋上','朝霧の湖','秘密の温室','空飛ぶ郵便局','砂糖菓子の街','眠らない水族館','古い天文台','夏の踏切','雪の降る港','地下の映画館','花びらの降る路地','鏡張りの駅','夜明けの屋台','霧の森の小屋','虹色の市場','金平糖の惑星','海辺の古書店','雲の上の学校','紫陽花の庭園','月の裏側の駅','透明な美術館','深夜の遊園地','流星の見える丘','空中庭園','さびれた灯台','星の診療所'];
+    const objects=['透明な傘','金魚鉢','蛍のランプ','オルゴール','小さな鍵','古いカメラ','ガラスの靴','手のひらの地図','月形のコンパス','赤い風船','ひとり用の舟','青い羽根','砂時計','魔法の絵筆','空の瓶','レースの手袋','壊れた時計','星型のクッキー','小鳥のブローチ','ミント色の鞄','眠り薬の小瓶','アンティークの鏡','虹の切符','白いレコード','貝殻の電話','光る万年筆','猫の首輪','小さな望遠鏡','雲の標本箱','夢のしおり','古びた王冠','銀色の笛'];
+    const motifs=['ひみつの手紙','眠らない猫','赤いリボン','猫の足あと','青い蝶','こぼれた星座','はじめての約束','消えかけた記憶','春を待つ人形','虹の残像','誰かの足音','遠い国の歌','泣きそうな三日月','迷子の幽霊','最後の花火','空色の影','魔女の忘れもの','雨の匂い','夏の予感','やさしい嘘','砂糖の雪','夜行性の白鳥','片想いの魔法','きらめく涙','昼寝する竜','未来からの便り','月の欠片','星を運ぶ列車','見えない友だち','秘密の合言葉','夢見るロボット','海の記憶'];
+    const beginnings=['月がほどける','星が眠る','雨音が消える','きみだけが知っている','夏が終わる','魔女が微笑む','風が花をさらう','海が空を映す','夜が名前を忘れる','春が迷子になる','時計が止まる','天使が羽を休める','街が夢を見る','雲が手紙を運ぶ','猫が月を盗む','朝が来ない','星座がほどける','光が泣いている','雪が魔法をかける','世界が静かになる','記憶が花を咲かせる','幽霊が恋をする','空がソーダ色になる','ひとりぼっちの月が笑う'];
+    const titleNouns=['午前二時','春の終わり','青い部屋','秘密の庭','ソーダ水','遠い惑星','眠る街','夏休み','透明な街','月の裏側','銀河鉄道','雨の水族館','花火の夜','小さな魔法','海の底','白いワンピース','星の名前','きみの影','真夜中の駅','虹の向こう','金平糖の空','夜明け前の海','最後の手紙','雲の上'];
+    const endings=['の話','を見つけた日','に咲く花','へ続く道','で待ち合わせ','のきらめき','を抱きしめて','に溶けていく','の秘密','から届いた便り','を追いかけて','と、さよなら','に恋をした','が聞こえる場所','をめぐる冒険','の約束'];
+    const emojis=['🪼','🫧','🕯️','🍓','🎠','🌙','🦋','🗝️','📮','🐈‍⬛','☔','💌','🦢','🎀','🪞','🌻','🚲','🪽','🧸','🍬','🎧','🪐','🦢','🫖','🪻','🧁','🎐','🧩','🧚','🍒','📚','🦜','🪄','🌂','🛼','🐚','🎀','🪴','🧸','🪞'];
+    const scenePlaces=['誰もいない夜の水族館で','春の風が強すぎる街で','遠い惑星の海辺で','夕暮れの屋上で','眠る街の上空で','雨上がりの駅のホームで','雲の上の教室で','海底の図書館で','花びらが降る路地裏で','月明かりの温室で','雪の遊園地で','真夜中の古書店で','星を売る市場で','虹色の湖のほとりで','雨雲の中で','古い灯台のてっぺんで','透明な美術館で','砂糖菓子の国で','夏祭りの帰り道で','朝霧の森で','流星の見える丘で','夜行列車の窓辺で','紫陽花の咲く庭で','空飛ぶ船の甲板で'];
+    const characters=['制服の少女が','小さな魔女が','ひとりのロボットが','白い猫が','迷子の幽霊が','花屋の少年が','羽のある郵便屋さんが','眠れない王女が','人魚が','古いぬいぐるみが','星の研究者が','雨を集める少女が','小さな竜が','不思議な双子が','時計職人が','月の番人が','見習い天使が','旅人が','画家が','ガラス細工の少年が','黒猫を連れた魔法使いが','雲を編む少女が','宇宙服の子どもが','風船売りが'];
+    const actions=['初めて笑った。','貝殻を拾っている。','雨雲にレースを縫いつけている。','誰にも言えない願いをかなえている。','光る手紙を読んでいる。','忘れものを探している。','星屑を瓶に集めている。','月に話しかけている。','大切な人を待っている。','小鳥と秘密を話している。','時間を少しだけ戻している。','花火を見上げている。','新しい魔法を練習している。','空へ手を伸ばしている。','遠い場所へ旅立とうとしている。','古い歌を口ずさんでいる。','見えない友だちと踊っている。','涙を宝石に変えている。','夢の地図を広げている。','小さな奇跡を見つけた。','風に手紙を預けている。','星のかけらを磨いている。','春の匂いを探している。','夜明けを瓶に閉じ込めている。'];
+    const history={words:[],title:[],emoji:[],scene:[]};
     const prompt=document.getElementById('prompt'), label=document.getElementById('label'), notice=document.getElementById('notice');
-    function draw(){ const set=prompts[mode]; let n=Math.floor(Math.random()*set.list.length); if(n===last)n=(n+1)%set.list.length; last=n; label.textContent=set.label; prompt.textContent=set.list[n]; notice.textContent=''; }
-    document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;last=-1;document.querySelectorAll('[data-mode]').forEach(x=>x.setAttribute('aria-pressed',x===b));draw();}));
+    let mode='words';
+    const pick=list=>list[Math.floor(Math.random()*list.length)];
+    function unique(modeName,make){ let value,tries=0; do { value=make(); tries++; } while(history[modeName].includes(value)&&tries<80); history[modeName].push(value); if(history[modeName].length>40)history[modeName].shift(); return value; }
+    function makePrompt(){
+      if(mode==='words') return unique(mode,()=>`${pick(places)} × ${pick(objects)} × ${pick(motifs)}`);
+      if(mode==='title') return unique(mode,()=>`「${pick(beginnings)}、${pick(titleNouns)}${pick(endings)}」`);
+      if(mode==='emoji') return unique(mode,()=>{ const first=pick(emojis); let second=pick(emojis),third=pick(emojis); while(second===first)second=pick(emojis); while(third===first||third===second)third=pick(emojis); return `${first}　${second}　${third}`; });
+      return unique(mode,()=>`${pick(scenePlaces)}、${pick(characters)}${pick(actions)}`);
+    }
+    function draw(){ const labels={words:'単語をつなげて描こう',title:'一枚絵のタイトルから描こう',emoji:'この3つを全部入れてみよう',scene:'空気感からはじめよう'}; label.textContent=labels[mode]; prompt.textContent=makePrompt(); notice.textContent=''; }
+    document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.setAttribute('aria-pressed',x===b));draw();}));
     document.getElementById('generate').addEventListener('click',draw);
     document.getElementById('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(prompt.textContent);notice.textContent='コピーしました ♡';}catch{notice.textContent='コピーして使ってね：'+prompt.textContent;}});
     document.querySelectorAll('.theme').forEach(b=>b.addEventListener('click',()=>{document.body.className=b.dataset.theme==='sugar'?'':b.dataset.theme;}));
